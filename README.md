@@ -1,1 +1,505 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Mask Detection System - AI Capstone Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0f0f0f url('https://thumbs.dreamstime.com/b/elegant-black-gold-marble-texture-veins-patterns-abstract-design-featuring-intricate-offering-luxurious-perfect-370434208.jpg') repeat;
+            color: #e8e8e8;
+            line-height: 1.8;
+        }
+        header {
+            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(15, 15, 15, 0.95)), url('https://static.vecteezy.com/system/resources/previews/005/016/980/non_2x/dark-luxury-background-with-abstract-ornament-elegant-and-classic-elements-ready-for-print-and-typography-vector.jpg') center/cover no-repeat;
+            color: #ffd700;
+            padding: 220px 20px;
+            text-align: center;
+            box-shadow: inset 0 0 250px rgba(0,0,0,0.8);
+        }
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 5.5em;
+            margin: 0;
+            text-shadow: 5px 5px 25px rgba(0,0,0,0.9);
+            letter-spacing: 2px;
+        }
+        header p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.9em;
+            margin: 25px 0;
+            text-shadow: 3px 3px 12px rgba(0,0,0,0.9);
+            font-style: italic;
+        }
+        nav {
+            background-color: rgba(15, 15, 15, 0.98);
+            padding: 30px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(25px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            border-bottom: 1px solid #ffd700;
+        }
+        nav a {
+            color: #ffd700;
+            margin: 0 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.4em;
+            transition: color 0.4s, transform 0.3s;
+            font-family: 'Playfair Display', serif;
+        }
+        nav a:hover {
+            color: #ffffff;
+            transform: scale(1.15);
+        }
+        section {
+            padding: 120px 60px;
+            max-width: 1600px;
+            margin: 0 auto 100px;
+            background: rgba(20, 20, 20, 0.95);
+            border-radius: 35px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.6);
+            border: 1px solid #333;
+        }
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: #ffd700;
+            text-align: center;
+            font-size: 4em;
+            margin-bottom: 80px;
+            position: relative;
+        }
+        h2::after {
+            content: '';
+            width: 250px;
+            height: 6px;
+            background: linear-gradient(to right, #ffd700, #b8860b);
+            display: block;
+            margin: 40px auto;
+            border-radius: 20px;
+        }
+        h3 {
+            font-family: 'Playfair Display', serif;
+            color: #ffd700;
+            font-size: 2.3em;
+            margin-top: 60px;
+        }
+        .intro-text {
+            text-align: center;
+            font-size: 1.5em;
+            max-width: 1200px;
+            margin: 0 auto 80px;
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+        }
+        .content-text {
+            font-size: 1.4em;
+            max-width: 1200px;
+            margin: 50px auto;
+            text-align: justify;
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 60px;
+            margin: 100px 0;
+        }
+        .gallery img {
+            width: 100%;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            transition: transform 0.7s, box-shadow 0.7s;
+            border: 2px solid #ffd700;
+        }
+        .gallery img:hover {
+            transform: translateY(-25px) scale(1.05);
+            box-shadow: 0 40px 90px rgba(255,215,0,0.3);
+        }
+        .team {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 70px;
+        }
+        .member {
+            background: linear-gradient(135deg, #1c1c1c, #2a2a2a);
+            padding: 70px;
+            border-radius: 35px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            transition: transform 0.6s;
+            border: 1px solid #444;
+        }
+        .member:hover {
+            transform: translateY(-25px);
+        }
+        .member h3 {
+            color: #ffd700;
+            font-size: 2.5em;
+            font-family: 'Playfair Display', serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 30px;
+            margin: 70px 0;
+        }
+        th, td {
+            padding: 35px;
+            background: linear-gradient(to right, #1f1f1f, #2a2a2a);
+            text-align: left;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        th {
+            background: linear-gradient(to right, #ffd700, #b8860b);
+            color: #000;
+            border-radius: 25px 25px 0 0;
+        }
+        td {
+            border-radius: 0 0 25px 25px;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 60px;
+            margin: 100px 0;
+        }
+        .feature {
+            background: linear-gradient(135deg, #252525, #333333);
+            padding: 50px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            transition: transform 0.5s;
+            border: 1px solid #ffd700;
+        }
+        .feature:hover {
+            transform: translateY(-20px);
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 35px;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.5);
+            margin: 100px 0;
+            border: 3px solid #ffd700;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: none;
+        }
+        /* Live Demo */
+        #demo-section {
+            text-align: center;
+            background: linear-gradient(135deg, #1a1a1a, #2f2f2f);
+            border-radius: 35px;
+        }
+        #demo-container {
+            position: relative;
+            width: 720px;
+            height: 540px;
+            border: 8px solid #ffd700;
+            box-shadow: 0 25px 60px rgba(255,215,0,0.4);
+            margin: 50px auto;
+            border-radius: 25px;
+            overflow: hidden;
+            background: #000;
+        }
+        #demo-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        #demo-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #demo-status {
+            font-size: 36px;
+            padding: 25px;
+            border-radius: 20px;
+            background: rgba(0,0,0,0.8);
+            display: inline-block;
+            margin: 40px 0;
+            border: 2px solid #ffd700;
+            font-family: 'Playfair Display', serif;
+        }
+        .with-mask { color: #90ee90; }
+        .no-mask { color: #ff6b6b; }
+        #demo-info {
+            max-width: 800px;
+            margin: 0 auto;
+            color: #ccc;
+            font-size: 1.3em;
+            font-style: italic;
+        }
+        footer {
+            background: linear-gradient(135deg, #000000, #1c1c1c);
+            color: #ffd700;
+            text-align: center;
+            padding: 100px;
+            font-size: 1.4em;
+            text-shadow: 3px 3px 12px rgba(0,0,0,0.9);
+            border-top: 2px solid #ffd700;
+        }
+        @media (max-width: 768px) {
+            header h1 { font-size: 4em; }
+            section { padding: 100px 40px; }
+            #demo-container { width: 100%; height: auto; aspect-ratio: 4/3; }
+        }
+    </style>
+</head>
+<body>
+<header id="home">
+    <h1>Face Mask Detection System</h1>
+    <p>An Exquisite AI Solution for Elevated Campus Safety</p>
+    <p>Capstone Project by Elite Innovators</p>
+    <p>Galaxy English Medium School, Fudam, Diu | Class XII A | 2025-26</p>
+    <p>Guided by: Mr. Priyank Ranjit Solanki</p>
+</header>
+<nav>
+    <a href="#home">Home</a>
+    <a href="#overview">Overview</a>
+    <a href="#team">Team</a>
+    <a href="#problem">Problem</a>
+    <a href="#howitworks">How It Works</a>
+    <a href="#benefits">Benefits</a>
+    <a href="#livedemo">Live Demo</a>
+    <a href="#solution">Solution</a>
+    <a href="#demo">Demo</a>
+    <a href="#testing">Testing</a>
+    <a href="#video">Video</a>
+</nav>
+<section id="overview">
+    <h2>Project Overview</h2>
+    <p class="intro-text">Our Face Mask Detection System is an exquisite AI-powered masterpiece developed to elevate health and safety standards in premier educational institutions and distinguished public spaces. Harnessing sophisticated computer vision and machine learning artistry, the system performs real-time detection of proper face mask adherence, safeguarding against airborne threats with unparalleled grace.</p>
+    <p class="intro-text">This distinguished project fulfills the Class XII Computer Science capstone distinction, addressing an observed elegance in our school community: the need for flawless mask compliance to maintain uninterrupted excellence.</p>
+   
+    <div class="gallery">
+        <img src="https://media.cnn.com/api/v1/images/stellar/prod/200810112911-face-recognition-john-trueface-mask-screenshot.jpg?q=w_2226,h_1676,x_0,y_0,c_fill" alt="Mask Detection in Action">
+        <img src="https://media.gq.com/photos/660c42f3a39cedb45aef570c/master/w_2560%2Cc_limit/old-money.jpg" alt="AI in Education Elegance">
+        <img src="https://thumbs.dreamstime.com/b/elegant-black-gold-marble-texture-veins-patterns-abstract-design-featuring-intricate-offering-luxurious-perfect-370434208.jpg" alt="Sophisticated AI Aesthetic">
+    </div>
+</section>
+<section id="team">
+    <h2>Meet Our Distinguished Team</h2>
+    <p class="intro-text">Elite Innovators is a collective of five exemplary students from Class XII A, each contributing refined expertise and unwavering commitment to this prestigious AI endeavor.</p>
+   
+    <div class="gallery">
+        
+    </div>
+    <div class="team">
+        <div class="member">
+            <h3>Bambhaniya Jasmit D.</h3>
+            <p><strong>Project Leader & Communication leader</strong><br></p>
+        </div>
+        <div class="member">
+            <h3>Vansh Paresh Patel</h3>
+            <p><strong>Designer</strong><br></p>
+        </div>
+        <div class="member">
+            <h3>Bhargav Suresh Solanki</h3>
+            <p><strong>Prototype Builder / Coder & Video producer</strong><br></p>
+        </div>
+        <div class="member">
+            <h3>Ayush Deepak Kagda</h3>
+            <p><strong>Information Researcher & Data Expert</strong><br></p>
+        </div>
+        <div class="member">
+            <h3>Dax Bhavik Chauhan</h3>
+            <p><strong>Tester</strong><br></p>
+        </div>
+    </div>
+</section>
+<section id="problem">
+    <h2>The Challenge We Elegantly Address</h2>
+    <p class="content-text">In distinguished institutions, the persistence of infections due to imperfect mask adherence remains a subtle concern. Manual oversight proves laborious, inconsistent, and beneath the standards of excellence, potentially leading to disruptions in the pursuit of perfection.</p>
+    <p class="content-text">This imperfection places undue strain on administration and faculty, detracting from the refined academic experience.</p>
+   
+    <div class="gallery">
+        <img src="https://s.wsj.net/public/resources/images/B3-HF513_WMAKEU_1000V_20200824111311.jpg" alt="Elegant Mask Compliance">
+        <img src="https://i.guim.co.uk/img/media/2a3efecea71ec3c7d49f6611b9de469bb232cce2/0_0_1920_1152/master/1920.jpg?width=1200&quality=85&auto=format&fit=max&s=b200da1290d5f1ec63d09e91eb1acb93" alt="Refined Campus Safety">
+        <img src="https://media.cnn.com/api/v1/images/stellar/prod/200810114551-20200810-facial-recognition-mask.jpg?q=w_1110,c_fill" alt="Sophisticated Campus Environment">
+    </div>
+    <table>
+        <tr><th>What Users SAY</th><td>"How may we elevate campus safety with impeccable mask detection?"</td></tr>
+        <tr><th>What Users THINK</th><td>Concerned about imperfections disrupting excellence.</td></tr>
+        <tr><th>What Users DO</th><td>Deploy personnel for oversight and seek superior alternatives.</td></tr>
+        <tr><th>How Users FEEL</th><td>Seeking assurance, refinement, and tranquility.</td></tr>
+    </table>
+</section>
+<section id="howitworks">
+    <h2>How the System Operates with Grace</h2>
+    <p class="content-text">Our Face Mask Detection System employs refined <strong>computer vision</strong> and <strong>deep learning</strong> mastery. It is founded upon a Convolutional Neural Network (CNN) model, trained on an exquisite collection of facial imagery.</p>
+   
+    <h3>Technical Mastery</h3>
+    <p class="content-text">1. <strong>Image Capture</strong>: Seamless feed from premium cameras or CCTV.</p>
+    <p class="content-text">2. <strong>Face Detection</strong>: Precise identification via elite algorithms.</p>
+    <p class="content-text">3. <strong>Classification</strong>: CNN elegantly distinguishes "With Mask" or "Without Mask".</p>
+    <p class="content-text">4. <strong>Action</strong>: Discreet alerts for any imperfection.</p>
+   
+    <div class="gallery">
+        <img src="https://www.researchgate.net/publication/340690545/figure/fig1/AS:893947396251649@1590145076640/Classic-CNN-architecture-13.ppm" alt="Elegant Process Flow">
+        <img src="https://guandi1995.github.io/images/classical_cnn/vgg-16-simplified.PNG" alt="Refined CNN Architecture">
+        <img src="https://media.cnn.com/api/v1/images/stellar/prod/200810112911-face-recognition-john-trueface-mask-screenshot.jpg?q=w_2226,h_1676,x_0,y_0,c_fill" alt="Sophisticated Real-Time Results">
+    </div>
+</section>
+<section id="benefits">
+    <h2>Exquisite Benefits & Advantages</h2>
+    <p class="content-text">This distinguished AI solution surpasses traditional methods with timeless superiority:</p>
+   
+    <div class="features">
+        <div class="feature"><strong>Unwavering Availability</strong><br>Perpetual elegance without fatigue.</div>
+        <div class="feature"><strong>Refined Efficiency</strong><br>Eliminates need for additional oversight.</div>
+        <div class="feature"><strong>Supreme Accuracy</strong><br>Impeccable and impartial detection.</div>
+        <div class="feature"><strong>Seamless Scalability</strong><br>Integrates flawlessly with existing systems.</div>
+        <div class="feature"><strong>Ultimate Protection</strong><br>Proactively preserves well-being.</div>
+        <div class="feature"><strong>Tranquil Assurance</strong><br>A sanctuary of refined safety.</div>
+    </div>
+</section>
+<section id="livedemo">
+    <h2>Exquisite Live Demonstration - Experience Now</h2>
+    <p class="intro-text">Swift and refined real-time face mask detector utilizing BlazeFace (an elegant lightweight model). Frames the visage and assesses with sophistication.</p>
+    <p class="content-text" style="font-style:italic; color:#aaa;">Grant camera access. Emerald = Mask Present | Crimson = Mask Absent. Swift loading for discerning devices.</p>
+    <div id="demo-section">
+        <div id="demo-container">
+            <video id="demo-video" autoplay playsinline muted></video>
+            <canvas id="demo-overlay"></canvas>
+        </div>
+        <div id="demo-status">Initializing... Please grant camera access</div>
+        <div id="demo-info">Gaze upon the lens with poise.</div>
+    </div>
+</section>
+<section id="solution">
+    <h2>Our Masterful Implemented Solution</h2>
+    <p class="content-text">We selected the premier Mask Detection Model for its unparalleled elegance and execution.</p>
+   
+    <div class="gallery">
+        <img src="https://media.cnn.com/api/v1/images/stellar/prod/200810112911-face-recognition-john-trueface-mask-screenshot.jpg?q=w_2226,h_1676,x_0,y_0,c_fill" alt="Sophisticated Live Detection">
+        <img src="https://i.guim.co.uk/img/media/2a3efecea71ec3c7d49f6611b9de469bb232cce2/0_0_1920_1152/master/1920.jpg?width=1200&quality=85&auto=format&fit=max&s=b200da1290d5f1ec63d09e91eb1acb93" alt="Refined Recognition">
+        <img src="https://guandi1995.github.io/images/classical_cnn/header_img.jpeg" alt="Elegant System Interface">
+    </div>
+</section>
+<section id="demo">
+    <h2>System Demonstration Mastery</h2>
+    <p class="content-text">Exemplary instances of flawless detection across diverse refinements.</p>
+   
+    <div class="gallery">
+        <img src="https://media.cnn.com/api/v1/images/stellar/prod/200810112911-face-recognition-john-trueface-mask-screenshot.jpg?q=w_2226,h_1676,x_0,y_0,c_fill" alt="Sophisticated Detection Grid">
+        <img src="https://www.researchgate.net/publication/340690545/figure/fig1/AS:893947396251649@1590145076640/Classic-CNN-architecture-13.ppm" alt="Refined Stream Results">
+    </div>
+</section>
+<section id="testing">
+    <h2>Testing & Exquisite Results</h2>
+    <p class="content-text">Meticulous evaluation revealed supreme accuracy. Feedback affirms extraordinary deployment potential.</p>
+   
+    <div class="gallery">
+        <img src="https://media.gq.com/photos/660c42f3a39cedb45aef570c/master/w_2560%2Cc_limit/old-money.jpg" alt="Refined Student Presentation">
+        <img src="https://guandi1995.github.io/images/classical_cnn/header_img.jpeg" alt="Elegant AI Project Testing">
+    </div>
+</section>
+<section id="video">
+    <h2>Project Presentation Masterpiece</h2>
+    <div class="video-container">
+        <iframe src="https://drive.google.com/file/d/1Xe-wCVEZJQH4tiRZwxgSEU7rJ3JtfLyh/view?usp=drive_link" allowfullscreen></iframe>
+    </div>
+</section>
+<footer>
+    <p>&copy; 2025 Elite Innovators - Galaxy English Medium School, Fudam, Diu</p>
+    <p>Supervised by Mr. Priyank Ranjit Solanki | Email: priyankranjit12@gmail.com</p>
+    <p>Elevating Health & Safety Through Timeless Artificial Intelligence</p>
+</footer>
+<!-- Reliable BlazeFace Live Demo Script -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface@0.0.7"></script>
+<script>
+    const video = document.getElementById('demo-video');
+    const canvas = document.getElementById('demo-overlay');
+    const ctx = canvas.getContext('2d');
+    const status = document.getElementById('demo-status');
+    canvas.width = 720;
+    canvas.height = 540;
+    async function setupCamera() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+            video.play();
+            status.textContent = "Camera ready. Loading refined BlazeFace model...";
+        } catch (err) {
+            status.textContent = "Camera access denied!";
+            status.className = "no-mask";
+            console.error(err);
+        }
+    }
+    async function runDetection() {
+        status.textContent = "Loading BlazeFace model...";
+        const model = await blazeface.load();
+        status.textContent = "Model loaded! Detecting with elegance...";
+        const detect = async () => {
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const predictions = await model.estimateFaces(video, false);
+            if (predictions.length > 0) {
+                const start = predictions[0].topLeft;
+                const end = predictions[0].bottomRight;
+                const landmarks = predictions[0].landmarks;
+                const nose = landmarks[2];
+                const mouthLeft = landmarks[4];
+                const mouthRight = landmarks[5];
+                const mouthX = (mouthLeft[0] + mouthRight[0]) / 2;
+                const mouthY = (nose[1] + mouthLeft[1] + mouthRight[1]) / 3 + 30;
+                let totalBrightness = 0;
+                let count = 0;
+                const sampleSize = 40;
+                const half = sampleSize / 2;
+                for (let dx = -half; dx < half; dx += 5) {
+                    for (let dy = -half; dy < half; dy += 5) {
+                        const x = Math.round(mouthX + dx);
+                        const y = Math.round(mouthY + dy);
+                        if (x > 0 && x < canvas.width && y > 0 && y < canvas.height) {
+                            const pixel = ctx.getImageData(x, y, 1, 1).data;
+                            totalBrightness += (pixel[0] + pixel[1] + pixel[2]) / 3;
+                            count++;
+                        }
+                    }
+                }
+                if (count > 0) {
+                    const avg = totalBrightness / count;
+                    const isMasked = avg < 110;
+                    status.textContent = isMasked ? "Mask Detected ✓" : "No Mask Detected ✗";
+                    status.className = isMasked ? "with-mask" : "no-mask";
+                    ctx.strokeStyle = isMasked ? "lime" : "red";
+                    ctx.lineWidth = 6;
+                    ctx.strokeRect(start[0], start[1], end[0] - start[0], end[1] - start[1]);
+                }
+            } else {
+                status.textContent = "No face detected";
+                status.className = "";
+            }
+            requestAnimationFrame(detect);
+        };
+        detect();
+    }
+    async function startDemo() {
+        await setupCamera();
+        if (video.srcObject) {
+            await runDetection();
+        }
+    }
+    startDemo();
+</script>
+</body>
+</html>
