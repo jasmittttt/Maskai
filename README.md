@@ -415,7 +415,7 @@
 <section id="video">
     <h2>Project Presentation Masterpiece</h2>
     <div class="video-container">
-        <iframe src="https://drive.google.com/file/d/1Xe-wCVEZJQH4tiRZwxgSEU7rJ3JtfLyh/view?usp=drive_link" allowfullscreen></iframe>
+        <iframe src="https://youtu.be/O1Tb4b9ucFc?si=p_EsS-uGthxV_3vD" allowfullscreen></iframe>
     </div>
 </section>
 <footer>
